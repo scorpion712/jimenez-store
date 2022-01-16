@@ -6,8 +6,8 @@ import {
   List,
   ListItemIcon,
   ListItemText,
-  ListItemButton,
-} from "@mui/material";
+  ListItem,
+} from "@mui/material"; 
 import MuiDrawer from "@mui/material/Drawer";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import ChevronRightIcon from "@mui/icons-material/ChevronRight";
@@ -15,7 +15,7 @@ import CategoryIcon from "@mui/icons-material/Category";
 import MonetizationOnIcon from "@mui/icons-material/MonetizationOn";
 import SwitchAccountIcon from "@mui/icons-material/SwitchAccount";
 import SellIcon from "@mui/icons-material/Sell";
-import { BrowserRouter, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 
 interface ISideBarProps {
   open: boolean;
@@ -26,22 +26,22 @@ interface ISideBarProps {
 const menuItems = [
   {
     name: "Ventas",
-    dir: "Sales",
+    dir: "/sales",
     icon: <MonetizationOnIcon />,
   },
   {
     name: "Cuentas",
-    dir: "accounts",
+    dir: "/accounts",
     icon: <SwitchAccountIcon />,
   },
   {
     name: "Presupuestos",
-    dir: "budgets",
+    dir: "/budgets",
     icon: <SellIcon />,
   },
   {
     name: "Productos",
-    dir: "products",
+    dir: "/products",
     icon: <CategoryIcon />,
   },
 ];
@@ -112,10 +112,10 @@ export default function SideBar(props: ISideBarProps) {
       <Divider />
       {menuItems.map((item) => (
         <List>
-          <ListItemButton key={item.name}>
+          <ListItem button component={Link} to={item.dir} key={item.name}>
             <ListItemIcon>{item.icon}</ListItemIcon>
-            <ListItemText>{item.name}</ListItemText>
-          </ListItemButton>
+            <ListItemText primary={item.name} />
+          </ListItem>
         </List>
       ))}
       <Divider />

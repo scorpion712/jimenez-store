@@ -1,5 +1,5 @@
 import React from 'react'
-import { AppBar, Toolbar, IconButton, Typography, CssBaseline } from "@mui/material";
+import { AppBar, Toolbar, IconButton, Typography } from "@mui/material";
 
 export default function Header(props: {open: boolean}) {
     return (
