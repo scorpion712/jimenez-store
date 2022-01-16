@@ -12,31 +12,30 @@ import React from "react";
 import DetailsIcon from "@mui/icons-material/Details";
 
 import useStyles from "../../styles";
+import DialogSale from "../../dialogs/DialogSale";
+import { ISale } from "../../interfaces/Sale";
 
-interface IProduct {
-  code: string;
-  description: string;
-  price: number;
-  count: number;
-}
-
-interface ISale {
-  id: string;
-  date: Date;
-  total: number;
-  products: IProduct[];
-  client?: string;
-}
 
 const sales: ISale[] = [
   {
     id: "000000001",
-    date: new Date(),
-    total: 250.5,
+    date: new Date(), 
     products: [
       {
         code: "codigo1",
         description: "descripcion1",
+        price: 125.25,
+        count: 2,
+      },
+      {
+        code: "codigo43",
+        description: "descripcion43",
+        price: 125.25,
+        count: 2,
+      },
+      {
+        code: "codigo45",
+        description: "descripcion45",
         price: 125.25,
         count: 2,
       },
@@ -45,7 +44,6 @@ const sales: ISale[] = [
   {
     id: "000000002",
     date: new Date(),
-    total: 40,
     products: [
       {
         code: "codigo2",
@@ -58,7 +56,6 @@ const sales: ISale[] = [
   {
     id: "000000001",
     date: new Date(),
-    total: 250.5,
     products: [
       {
         code: "codigo1",
@@ -71,7 +68,6 @@ const sales: ISale[] = [
   {
     id: "000000002",
     date: new Date(),
-    total: 40,
     products: [
       {
         code: "codigo2",
@@ -84,7 +80,6 @@ const sales: ISale[] = [
   {
     id: "000000001",
     date: new Date(),
-    total: 250.5,
     products: [
       {
         code: "codigo1",
@@ -97,7 +92,6 @@ const sales: ISale[] = [
   {
     id: "000000002",
     date: new Date(),
-    total: 40,
     products: [
       {
         code: "codigo2",
@@ -110,7 +104,6 @@ const sales: ISale[] = [
   {
     id: "000000001",
     date: new Date(),
-    total: 250.5,
     products: [
       {
         code: "codigo1",
@@ -123,7 +116,6 @@ const sales: ISale[] = [
   {
     id: "000000002",
     date: new Date(),
-    total: 40,
     products: [
       {
         code: "codigo2",
@@ -140,11 +132,24 @@ export default function SalesTable(props: {
   dateFrom: Date | null;
   dateTo: Date | null;
 }) {
+
+
+  const headers : string [] = [
+    "#", "Fecha", "Total", "Cliente", ""
+  ]; 
+
+
   const classes = useStyles();
 
   const { search, dateFrom, dateTo } = props; 
   const [page, setPage] = React.useState(0);
   const [rowsPerPage, setRowsPerPage] = React.useState(10);
+  const [openDetail, setOpenDetail ] = React.useState(false);
+  const [selectedSale, setSelectedSale ] = React.useState<ISale | null>(null);
+
+  const handleClose = () => {
+    setOpenDetail(false);
+  }
 
   const handleChangePage = (event: unknown, newPage: number) => {
     setPage(newPage);
@@ -157,28 +162,24 @@ export default function SalesTable(props: {
     setPage(0);
   };
 
+  const onDetailClick = (sale: ISale) => {
+    setSelectedSale(sale);
+    setOpenDetail(true);
+  }
+
   return (
     <>
       <TableContainer>
         <Table>
           <TableHead>
             <TableRow>
-              <TableCell align="left" className={classes.tableCellHead}>
-                #
-              </TableCell>
-              <TableCell align="left" className={classes.tableCellHead}>
-                Fecha
-              </TableCell>
-              <TableCell align="left" className={classes.tableCellHead}>
-                Total
-              </TableCell>
-              <TableCell align="left" className={classes.tableCellHead}>
-                Client
-              </TableCell>
-              <TableCell
-                align="left"
-                className={classes.tableCellHead}
-              ></TableCell>
+              {
+                headers.map(th => (
+                  <TableCell align="left" className={classes.tableCellHead}>
+                    {th}
+                  </TableCell>
+                ))
+              }
             </TableRow>
           </TableHead>
           <TableBody>
@@ -201,13 +202,13 @@ export default function SalesTable(props: {
                     {new Date(sale.date).toLocaleDateString("es-ES")}
                   </TableCell>
                   <TableCell component="th" scope="row">
-                    {sale.total}
+                    {sale.products.reduce(((total, product)=> total+product.price), 0)}
                   </TableCell>
                   <TableCell component="th" scope="row">
                     {sale.client ? sale.client : "-"}
                   </TableCell>
                   <TableCell style={{ width: "5%" }}>
-                    <IconButton>
+                    <IconButton onClick={() => onDetailClick(sale)}>
                       <DetailsIcon />
                     </IconButton>
                   </TableCell>
@@ -227,6 +228,7 @@ export default function SalesTable(props: {
         labelRowsPerPage="Ventas por página"
         className={classes.tablePagination}
       />
+      <DialogSale open={openDetail} handleClose={handleClose} sale={selectedSale}/>
     </>
   );
 }
