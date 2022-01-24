@@ -1,12 +1,13 @@
-import { CssBaseline, Grid } from "@mui/material";
-import React from "react"; 
-
-import Header from "../components/Header";
+import React from "react";  
 import SalesTable from "../components/sales/SalesTable";
-import SideBar from "../components/SideBar";
-import SalesForm from "../components/sales/SalesForm";
 
-export default function SalesView() { 
+import GenericSalesView from "./GenericSalesView";
+
+export default function SalesView(props: {
+  search: string,
+  dateFrom: Date | null,
+  dateTo: Date | null
+}) { 
 
   const [open, setOpen] = React.useState(true);
   const [search, setSearch] = React.useState('');
@@ -33,25 +34,15 @@ export default function SalesView() {
   }
 
   return (
-    <Grid container spacing={1}>
-      <Grid item xs={12}>
-        <CssBaseline />
-        <Header open={open} />
-      </Grid>
-      <SideBar
-        open={open}
-        handleDrawerOpen={handleDrawerOpen}
-        handleDrawerClose={handleDrawerClose}
-      />
-      <SalesForm handleSearch={handleSearch} handleDateTo={handleDateTo} handleDateFrom={handleDateFrom} />
-      <Grid
-        item
-        xs={10}
-        justifyContent="flex-start"
-        style={{ marginLeft: "16rem" }}
+    <GenericSalesView 
+      open={open} 
+      handleDrawerOpen={handleDrawerOpen} 
+      handleDrawerClose={handleDrawerClose} 
+      handleDateFrom={handleDateFrom}
+      handleDateTo={handleDateTo}
+      handleSearch={handleSearch}
       >
         <SalesTable search={search} dateFrom={dateFrom} dateTo={dateTo} />
-      </Grid>
-    </Grid>
+    </GenericSalesView>
   );
 }
